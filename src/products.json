@@ -1,0 +1,24 @@
+[
+    {
+        "id": "75130c7f-57c6-42f7-be73-91542fe723f6",
+        "title": "#########################",
+        "description": "Descripsdasdasdasdascion",
+        "price": 12,
+        "thumbnail": "assdadasddad",
+        "code": "asfa",
+        "stock": 14,
+        "status": true,
+        "category": "pruSasaSasASasASaseba"
+    },
+    {
+        "id": "6d724a27-bb0f-4ca9-8b88-99c42bbe7dfd",
+        "title": "Poducto 4",
+        "description": "Descripcion",
+        "price": 400,
+        "thumbnail": "asdad",
+        "code": "mt3",
+        "stock": 14,
+        "status": "false",
+        "category": "prueba"
+    }
+]
