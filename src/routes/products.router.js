@@ -4,14 +4,11 @@ import { ProductManager } from '../productManager.js';
 
 const productManager = new ProductManager(); 
 
-
-// OBJETIVOS A REALIZAR  - CRUD 
-
 // Realizar una ruta que reciba todos los productos y declarar un limite por query new
-// Recuperar un producto en especifico por id
-// Agregar un producto nuevo
-// actualizar un producto existente
-// eliminar un producto existente
+// Recuperar un producto en especifico 
+// Agregar un producto
+// actualizar un producto
+// eliminar un producto 
 
 
 //traer todos los productos que tengamos en el archivo products.json y si recibimos un limite traer los productos hasta ese limite
@@ -41,7 +38,7 @@ productsRouter.get('/', async (req, res) => {
 
     } catch (error) {
         console.log(error)
-        res.send('error al intentar recibir los productos')
+        res.status(500).json({ error: 'Error al intentar recibir los productos' });
     }
 
 })
@@ -83,27 +80,42 @@ productsRouter.post('/', async (req, res) => {
 
 });
 
-
 // PUT EDITAR PRODUCTO
-//DELETE
 
-productsRouter.delete('/:pid', async (req, res) => {
-
-    // primeri intentamos obtener este id por los params
+productsRouter.put('/:pid', async (req, res) => {
+    // Intentamos obtener el ID del producto de los parámetros de la solicitud
     const { pid } = req.params;
 
     try {
-        await productManager.deleteProduct(pid)
+        // Extraemos los datos del cuerpo de la solicitud
+        const { title, description, price, thumbnail, code, stock, status = true, category } = req.body;
 
+        // Llamamos al método updateProduct con el ID del producto y los nuevos datos
+        const response = await productManager.updateProduct(pid, { title, description, price, thumbnail, code, stock, status, category });
 
-        res.send('producto eliminado exitosamente')
-
+        // Respondemos con el producto actualizado
+        res.json({ response, message: "Producto actualizado correctamente" });
     } catch (error) {
-        console.log(error)
-        res.send(`error al intentar eliminar producto con id ${pid}`)
+        console.error('Error al intentar editar el producto:', error);
+        res.status(500).send('Error al intentar actualizar el producto');
     }
+});
 
-})
+
+//DELETE
+
+// Eliminar un producto
+productsRouter.delete('/:pid', async (req, res) => {
+    const { pid } = req.params;
+
+    try {
+        await productManager.deleteProduct(pid);
+        res.json({ message: 'Producto eliminado exitosamente' });
+    } catch (error) {
+        console.error(`Error al intentar eliminar el producto con ID ${pid}:`, error);
+        res.status(500).json({ error: `Error al intentar eliminar el producto con ID ${pid}` });
+    }
+});
 
 //http;//localhost:8080/products/ 
 

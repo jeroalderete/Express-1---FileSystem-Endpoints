@@ -15,40 +15,44 @@ export class ProductManager {
     // para agregar un producto las condiciones son tener todos esos datos que pedimos en nuestro back -  ({ title, description, price, thumbnail, code, stock, status, category }) 
 
     addProduct = async ({ title, description, price, thumbnail, code, stock, status, category }) => {
+        try {
+            const id = uuidv4(); // Genera un id único para el producto
 
-        const id = uuidv4() // genera un id automatico por producto
+            // Crea un nuevo objeto producto con todos los detalles más el id único
+            let newProduct = { id, title, description, price, thumbnail, code, stock, status, category };
 
-        // creamos un nuevo producto en una variable y le agregamos todo o que nos pide mas el id unico
-        let newProduct = { id, title, description, price, thumbnail, code, stock, status, category }
+            // Obtiene todos los productos actuales
+            this.products = await this.getProducts();
 
-        this.products = await this.getProducts() // IMPORTANTE igualamos nuestro array vacio a todo lo que tiene nuestro archivo product.json y una vez igualado pusheo el nuevo producto al array
+            // Agrega el nuevo producto al array de productos
+            this.products.push(newProduct);
 
-        // a este nuevo producto lo pusheamos al nuevo array de productos que generamos arriba en el constructor
-        this.products.push(newProduct)
-
-
-        // una vez pusheado el producto guardamos el producto
-        // hacemos el await del filesystem - VAMOS A UTILIZAR EL WRITEFILE DE FILESYSTEM PARA GUARDAR EL ARCHIVO
-        // le pasamos el path y hacemos el stringify del array completo donde van a estar todos los productos, con esot guardamos un producto
-        await fs.writeFile(this.path, JSON.stringify(this.products))
-
+            // Guarda el array actualizado de productos en el archivo
+            await fs.writeFile(this.path, JSON.stringify(this.products));
+        } catch (error) {
+            // Manejo de errores
+            console.error('Error al intentar agregar un producto:', error);
+            // Lanza un nuevo error con un mensaje descriptivo
+            throw new Error('Error al intentar agregar un producto');
+        }
     }
 
     // GET PRODUCTS 
-
     // esta funcion mas tarde la vamos a reutilizar para obtener productos por id, borrar productos por id e incluso actualizar productos por id 
 
     getProducts = async () => {
 
-        // vamos a tener una respuesta , le pasamos el path, utf8 lo que hace es parsear la data para que la veamos sin 0 Y 1, 
-        const response = await fs.readFile(this.path, 'utf8')
-
-        // una vez que tenemos la respuesta la tenemos que pasar a json
-
-        const responseJSON = JSON.parse(response)
-
-        // retornamos la respuesta
-        return responseJSON
+        try {
+            // vamos a tener una respuesta , le pasamos el path, utf8 lo que hace es parsear la data para que la veamos sin 0 Y 1, 
+            const response = await fs.readFile(this.path, 'utf8')
+            // una vez que tenemos la respuesta la tenemos que pasar a json
+            const responseJSON = JSON.parse(response)
+            // retornamos la respuesta
+            return responseJSON
+        } catch (error) {
+            console.error('Error al leer los productos', error)
+            throw new Error;
+        }
     }
 
 
@@ -65,50 +69,80 @@ export class ProductManager {
             //validamos si existe un producto cuyo id sea igual a id que recibimos por parametro, lo hacemos utilizando el metodo nativo de JS find
             const product = response.find(product => product.id === id);
 
-            // valido si existe un producto y lo retorno
-            if (product) {
-                return product;
-            } else {
+            // Valido si no existe el producto tiro un error
+            if (!product) {
                 // caso contrario de no existir emito un mensaje
                 throw new Error('Producto no encontrado');
             }
+            // si existe lo retorno
+            return product;
         } catch (error) {
             // manejo los errores del back
             console.error('Error al obtener productos:', error);
-            throw error;
+            // Recomendado utilizar throw new Error para establecer un mensaje personalizado
+            throw new Error(`el producto con el id ${id} no existe`);
         }
     }
 
     //UPDATE PRODUCT
+    // recibe el id del producto que queremos modificar y recibe toda la informacion que se va a atualizar por eso usamos el spread operator
 
-
+    updateProduct = async (id, { ...data }) => {
+        try {
+            // Obtenemos todos los productos
+            const products = await this.getProducts();
+    
+            // Buscamos el índice del producto con el ID proporcionado
+            const index = products.findIndex(product => product.id === id);
+    
+            // Si se encuentra el producto, actualizamos sus datos
+            if (index !== -1) {
+                products[index] = { id, ...data };
+    
+                // Guardamos los productos actualizados en el archivo
+                await fs.writeFile(this.path, JSON.stringify(products));
+    
+                // Retornamos el producto actualizado
+                return products[index];
+            } else {
+                // Si no se encuentra el producto, lanzamos un error
+                throw new Error('Producto no encontrado');
+            }
+        } catch (error) {
+            // Manejo de errores
+            console.error('Error al intentar actualizar el producto:', error);
+            // Lanzamos un nuevo error con un mensaje descriptivo
+            throw new Error('Error al intentar actualizar el producto');
+        }
+    }
     
 
     // DELETE PRODUCT
     // vamos a necesitar el indice para removerlo
 
     deleteProduct = async (id) => {
-        // obtengo todos los productos
-        const product = await this.getProducts()
-
-        const index = product.findIndex(product => product.id === id)
-
-        if (index !== -1) {
-
-            // si existe el producto  le hacemeos un splice (funcion nativa de js para eliminar) de donde se encuentra el producto, es decir el index  y el valor 1
-            // borra en el array de productos todo el producto que se encuentra en el indice que pasemos o que obtenga del find index
-
-            product.splice(index, 1)
-            //una vez eliminado le volvemos a sobrescribir el archivo de products.json
-            await fs.writeFile(this.path, JSON.stringify(product))
-
-        } else {
-            //manejo de errores
-            console.log('no se encuentra el producto')
+        try {
+            // Obtengo todos los productos
+            const products = await this.getProducts();
+    
+            // Busco el índice del producto con el ID proporcionado
+            const index = products.findIndex(product => product.id === id);
+    
+            // Si se encuentra el producto, lo eliminamos
+            if (index !== -1) {
+                // Eliminamos el producto del array de productos
+                products.splice(index, 1);
+                // Sobrescribimos el archivo de productos con el array actualizado
+                await fs.writeFile(this.path, JSON.stringify(products));
+            } else {
+                // Si no se encuentra el producto, lanzamos un error
+                throw new Error('Producto no encontrado');
+            }
+        } catch (error) {
+            // Manejo de errores
+            console.error('Error al intentar eliminar el producto:', error);
+            // Lanzamos un nuevo error con un mensaje descriptivo
+            throw new Error('Error al intentar eliminar el producto');
         }
-
     }
-
-
-
 }

@@ -20,5 +20,49 @@
         "stock": 14,
         "status": "false",
         "category": "prueba"
+    },
+    {
+        "id": "aaacffae-6018-40b3-88f8-61fcca4c4d90",
+        "title": "Poducto 4",
+        "description": "Descripcion",
+        "price": 400,
+        "thumbnail": "asdad",
+        "code": "mt3",
+        "stock": 14,
+        "status": "false",
+        "category": "prueba"
+    },
+    {
+        "id": "388419e0-f07a-4c35-aee5-273061c39309",
+        "title": "Poducto 4",
+        "description": "Descripcion",
+        "price": 400,
+        "thumbnail": "asdad",
+        "code": "mt3",
+        "stock": 14,
+        "status": "false",
+        "category": "prueba"
+    },
+    {
+        "id": "edd1c5e7-456e-4af1-b7af-3d8ff402d100",
+        "title": "Poducto 4",
+        "description": "Descripcion",
+        "price": 400,
+        "thumbnail": "asdad",
+        "code": "mt3",
+        "stock": 14,
+        "status": "false",
+        "category": "prueba"
+    },
+    {
+        "id": "b6a1d183-67b1-4f95-924f-7c107f221fcd",
+        "title": "Poducto 4",
+        "description": "Descripcion",
+        "price": 400,
+        "thumbnail": "asdad",
+        "code": "mt3",
+        "stock": 14,
+        "status": "false",
+        "category": "prueba"
     }
 ]
