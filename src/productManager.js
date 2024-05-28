@@ -62,7 +62,7 @@ export class ProductManager {
 
         try {
             // UTILIZAMOS LA FUNCION GETPRODUCT PORQUE NECESITAMOS TODOS LOS PRODUCTOS DEL JSON PARA BORRAR !
-            // IMPORTANTE Esperar a que se resuelva la promesa y obtener los productos por eso utilizamos await
+            // IMPORTANTE Esperar a que se resuelva la promesa y obtener los productos por eso utilizamos await !
             const response = await this.getProducts();
 
             // Validar si existe un producto cuyo id sea igual al id que recibimos por parámetro

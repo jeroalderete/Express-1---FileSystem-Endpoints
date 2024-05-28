@@ -34,7 +34,7 @@ productsRouter.get('/', async (req, res) => {
             return res.json(limitedProducts)  // transofrmamos a json la respuesta para que pueda ser enviada !
         }
 
-        return res.json(products) // express establetece automaticamente en el header el content type en application/json - lo que indic que el cuerpo de la repsuesta tiene datos json
+        return res.json(products) // express establetece automaticamente en el header el content type en application/json ! - lo que indic que el cuerpo de la repsuesta tiene datos json
 
     } catch (error) {
         console.log(error)

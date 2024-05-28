@@ -7,7 +7,7 @@ const app = express();
 
 app.use(express.json())
 
-// utilizamos un middleware para crear el endpoint por default de los productos /api/products , todo lo que se cree en product.router tendra esa ruta por detras /api/products/ !
+// utilizamos un middleware para crear el endpoint por default de los productos /api/products ! , todo lo que se cree en product.router tendra esa ruta por detras /api/products/ !
 app.use('/api/products', productsRouter) 
 
 
