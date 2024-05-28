@@ -61,17 +61,17 @@ export class ProductManager {
     getProductById = async (id) => {
 
         try {
-            // UTILIZAMOS LA FUNCION GETPRODUCT PORQUE NECESITAMOS TODOS LOS PRODUCTOS DEL JSON PARA BORRAR
+            // UTILIZAMOS LA FUNCION GETPRODUCT PORQUE NECESITAMOS TODOS LOS PRODUCTOS DEL JSON PARA BORRAR !
             // IMPORTANTE Esperar a que se resuelva la promesa y obtener los productos por eso utilizamos await
             const response = await this.getProducts();
 
             // Validar si existe un producto cuyo id sea igual al id que recibimos por parámetro
-            //validamos si existe un producto cuyo id sea igual a id que recibimos por parametro, lo hacemos utilizando el metodo nativo de JS find
+            //validamos si existe un producto cuyo id sea igual a id que recibimos por parametro, lo hacemos utilizando el metodo nativo de JS find !
             const product = response.find(product => product.id === id);
 
             // Valido si no existe el producto tiro un error
             if (!product) {
-                // caso contrario de no existir emito un mensaje
+                // caso contrario de no existir emito un mensaje 
                 throw new Error('Producto no encontrado');
             }
             // si existe lo retorno
